@@ -18,8 +18,9 @@ enum ENUM_STG_RETRACEMENT_TYPE {
 
 // User params.
 INPUT_GROUP("Retracement strategy: main strategy params");
-INPUT ENUM_STG_RETRACEMENT_TYPE Retracement_Type = STG_RETRACEMENT_TYPE_TEMA;  // Retracement: Indicator MA type
-INPUT ENUM_PP_TYPE Retracement_Calc_Mode = PP_FLOOR;                           // Calculation mode
+INPUT ENUM_STG_RETRACEMENT_TYPE Retracement_Indi_Type = STG_RETRACEMENT_TYPE_TEMA;  // Retracement: Indicator MA type
+INPUT ENUM_PP_TYPE Retracement_Levels_Calc_Method = PP_FLOOR;                       // Method for level calculations
+INPUT ENUM_APPLIED_PRICE Retracement_Levels_Applied_Price = PRICE_TYPICAL;          // Calculation mode
 INPUT_GROUP("Retracement strategy: strategy params");
 INPUT float Retracement_LotSize = 0;                // Lot size
 INPUT int Retracement_SignalOpenMethod = 1;         // Signal open method (-3-3)
@@ -135,7 +136,7 @@ class Stg_Retracement : public Strategy {
    */
   void OnInit() {
     // Initialize indicators.
-    switch (Retracement_Type) {
+    switch (::Retracement_Indi_Type) {
       case STG_RETRACEMENT_TYPE_AMA:  // AMA
       {
         IndiAMAParams _indi_params(::Retracement_Indi_AMA_InpPeriodAMA, ::Retracement_Indi_AMA_InpFastPeriodEMA,
@@ -143,7 +144,7 @@ class Stg_Retracement : public Strategy {
                                    PRICE_TYPICAL, ::Retracement_Indi_AMA_Shift);
         _indi_params.SetDataSourceType(::Retracement_Indi_AMA_SourceType);
         _indi_params.SetTf(Get<ENUM_TIMEFRAMES>(STRAT_PARAM_TF));
-        SetIndicator(new Indi_AMA(_indi_params), ::Retracement_Type);
+        SetIndicator(new Indi_AMA(_indi_params), ::Retracement_Indi_Type);
         break;
       }
       case STG_RETRACEMENT_TYPE_DEMA:  // DEMA
@@ -152,7 +153,7 @@ class Stg_Retracement : public Strategy {
                                         ::Retracement_Indi_DEMA_Applied_Price, ::Retracement_Indi_DEMA_Shift);
         _indi_params.SetDataSourceType(::Retracement_Indi_DEMA_SourceType);
         _indi_params.SetTf(Get<ENUM_TIMEFRAMES>(STRAT_PARAM_TF));
-        SetIndicator(new Indi_DEMA(_indi_params), ::Retracement_Type);
+        SetIndicator(new Indi_DEMA(_indi_params), ::Retracement_Indi_Type);
         break;
       }
       case STG_RETRACEMENT_TYPE_FRAMA:  // FrAMA
@@ -161,7 +162,7 @@ class Stg_Retracement : public Strategy {
                                          ::Retracement_Indi_FrAMA_Applied_Price, ::Retracement_Indi_FrAMA_Shift);
         _indi_params.SetDataSourceType(::Retracement_Indi_FrAMA_SourceType);
         _indi_params.SetTf(Get<ENUM_TIMEFRAMES>(STRAT_PARAM_TF));
-        SetIndicator(new Indi_FrAMA(_indi_params), ::Retracement_Type);
+        SetIndicator(new Indi_FrAMA(_indi_params), ::Retracement_Indi_Type);
         break;
       }
       case STG_RETRACEMENT_TYPE_ICHIMOKU:  // Ichimoku
@@ -171,7 +172,7 @@ class Stg_Retracement : public Strategy {
             ::Retracement_Indi_Ichimoku_Period_Senkou_Span_B, ::Retracement_Indi_Ichimoku_Shift);
         _indi_params.SetDataSourceType(::Retracement_Indi_Ichimoku_SourceType);
         _indi_params.SetTf(Get<ENUM_TIMEFRAMES>(STRAT_PARAM_TF));
-        SetIndicator(new Indi_Ichimoku(_indi_params), ::Retracement_Type);
+        SetIndicator(new Indi_Ichimoku(_indi_params), ::Retracement_Indi_Type);
         break;
       }
       case STG_RETRACEMENT_TYPE_MA:  // MA
@@ -181,7 +182,7 @@ class Stg_Retracement : public Strategy {
                                   ::Retracement_Indi_MA_Shift);
         _indi_params.SetDataSourceType(::Retracement_Indi_MA_SourceType);
         _indi_params.SetTf(Get<ENUM_TIMEFRAMES>(STRAT_PARAM_TF));
-        SetIndicator(new Indi_MA(_indi_params), ::Retracement_Type);
+        SetIndicator(new Indi_MA(_indi_params), ::Retracement_Indi_Type);
         break;
       }
       case STG_RETRACEMENT_TYPE_PRICE_CHANNEL:  // Price Channel
@@ -190,7 +191,7 @@ class Stg_Retracement : public Strategy {
                                             ::Retracement_Indi_PriceChannel_Shift);
         _indi_params.SetDataSourceType(::Retracement_Indi_PriceChannel_SourceType);
         _indi_params.SetTf(Get<ENUM_TIMEFRAMES>(STRAT_PARAM_TF));
-        SetIndicator(new Indi_PriceChannel(_indi_params), ::Retracement_Type);
+        SetIndicator(new Indi_PriceChannel(_indi_params), ::Retracement_Indi_Type);
         break;
       }
       case STG_RETRACEMENT_TYPE_SAR:  // SAR
@@ -199,7 +200,7 @@ class Stg_Retracement : public Strategy {
                                    ::Retracement_Indi_SAR_Shift);
         _indi_params.SetDataSourceType(::Retracement_Indi_SAR_SourceType);
         _indi_params.SetTf(Get<ENUM_TIMEFRAMES>(STRAT_PARAM_TF));
-        SetIndicator(new Indi_SAR(_indi_params), ::Retracement_Type);
+        SetIndicator(new Indi_SAR(_indi_params), ::Retracement_Indi_Type);
         break;
       }
       case STG_RETRACEMENT_TYPE_TEMA:  // TEMA
@@ -208,7 +209,7 @@ class Stg_Retracement : public Strategy {
                                     ::Retracement_Indi_TEMA_Applied_Price, ::Retracement_Indi_TEMA_Shift);
         _indi_params.SetDataSourceType(::Retracement_Indi_TEMA_SourceType);
         _indi_params.SetTf(Get<ENUM_TIMEFRAMES>(STRAT_PARAM_TF));
-        SetIndicator(new Indi_TEMA(_indi_params), ::Retracement_Type);
+        SetIndicator(new Indi_TEMA(_indi_params), ::Retracement_Indi_Type);
         break;
       }
       case STG_RETRACEMENT_TYPE_VIDYA:  // VIDYA
@@ -218,7 +219,7 @@ class Stg_Retracement : public Strategy {
                                      ::Retracement_Indi_VIDYA_Shift);
         _indi_params.SetDataSourceType(::Retracement_Indi_VIDYA_SourceType);
         _indi_params.SetTf(Get<ENUM_TIMEFRAMES>(STRAT_PARAM_TF));
-        SetIndicator(new Indi_VIDYA(_indi_params), ::Retracement_Type);
+        SetIndicator(new Indi_VIDYA(_indi_params), ::Retracement_Indi_Type);
         break;
       }
       case STG_RETRACEMENT_TYPE_0_NONE:  // (None)
@@ -232,7 +233,7 @@ class Stg_Retracement : public Strategy {
    */
   bool SignalOpen(ENUM_ORDER_TYPE _cmd, int _method = 0, float _level = 0.0f, int _shift = 0) {
     Chart *_chart = trade.GetChart();
-    IndicatorBase *_indi = GetIndicator(::Retracement_Type);
+    IndicatorBase *_indi = GetIndicator(::Retracement_Indi_Type);
     // uint _ishift = _indi.GetParams().GetShift(); // @todo: Convert into Get().
     // bool _result = _indi.GetFlag(INDI_ENTRY_FLAG_IS_VALID, _shift); // @fixme
     uint _ishift = _shift;
@@ -246,7 +247,7 @@ class Stg_Retracement : public Strategy {
     float _pp, _r1, _r2, _r3, _r4, _s1, _s2, _s3, _s4;
     ChartEntry _ohlc_d1 = _chart.GetEntry(PERIOD_D1, _shift + 1, _chart.GetSymbol());
     double _d1_pivot =
-        _ohlc_d1.bar.ohlc.GetPivots(::Retracement_Calc_Mode, _pp, _r1, _r2, _r3, _r4, _s1, _s2, _s3, _s4);
+        _ohlc_d1.bar.ohlc.GetPivots(::Retracement_Levels_Calc_Method, _pp, _r1, _r2, _r3, _r4, _s1, _s2, _s3, _s4);
     bool _ma_cross_r1_up = _indi[_ishift][0] > _r1 + _level_pips && _indi[_ishift + 1][0] < _r1;
     bool _ma_cross_r2_up = _indi[_ishift][0] > _r2 + _level_pips && _indi[_ishift + 1][0] < _r2;
     bool _ma_cross_r3_up = _indi[_ishift][0] > _r3 + _level_pips && _indi[_ishift + 1][0] < _r3;
