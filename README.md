@@ -1,4 +1,4 @@
-# Strategy MA Cross Sup/Res
+# Strategy Retracement
 
 [![Status][gha-image-check-master]][gha-link-check-master]
 [![Status][gha-image-compile-master]][gha-link-compile-master]
@@ -7,8 +7,7 @@
 [![License][license-image]][license-link]
 [![Edit][gh-edit-badge]][gh-edit-link]
 
-Strategy based on the moving average price indicators
-implementing support/resistance cross signal.
+Strategy based on the Fibonacci retracement levels.
 
 ## Dependencies
 
