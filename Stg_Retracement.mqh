@@ -18,10 +18,10 @@ enum ENUM_STG_RETRACEMENT_TYPE {
 
 // User params.
 INPUT_GROUP("Retracement strategy: main strategy params");
-INPUT ENUM_STG_RETRACEMENT_TYPE Retracement_Indi_Type = STG_RETRACEMENT_TYPE_TEMA;  // Retracement: Indicator MA type
-INPUT ENUM_PP_TYPE Retracement_Levels_Calc_Method = PP_FLOOR;                       // Method for level calculations
-INPUT ENUM_APPLIED_PRICE Retracement_Levels_Applied_Price = PRICE_TYPICAL;          // Calculation mode
-INPUT ENUM_TIMEFRAMES Retracement_Levels_Tf = PERIOD_D1;                            // Calculation timeframe
+INPUT ENUM_STG_RETRACEMENT_TYPE Retracement_Indi_Type = STG_RETRACEMENT_TYPE_FRAMA;  // Retracement: Indicator MA type
+INPUT ENUM_PP_TYPE Retracement_Levels_Calc_Method = PP_CLASSIC;                      // Method for level calculations
+INPUT ENUM_APPLIED_PRICE Retracement_Levels_Applied_Price = PRICE_HIGH;              // Calculation mode
+INPUT ENUM_TIMEFRAMES Retracement_Levels_Tf = PERIOD_D1;                             // Calculation timeframe
 INPUT_GROUP("Retracement strategy: strategy params");
 INPUT float Retracement_LotSize = 0;                // Lot size
 INPUT int Retracement_SignalOpenMethod = 0;         // Signal open method (-3-3)
@@ -322,6 +322,60 @@ class Stg_Retracement : public Strategy {
       default:
         break;
     }
+  }
+
+  /**
+   * Gets price stop value.
+   */
+  float PriceStop(ENUM_ORDER_TYPE _cmd, ENUM_ORDER_TYPE_VALUE _mode, int _method = 0, float _level = 0.0f,
+                  short _bars = 4) {
+    float _result = 0;
+    if (_method == 0) {
+      // Ignores calculation when method is 0.
+      return (float)_result;
+    }
+    float _trade_dist = trade.GetTradeDistanceInValue();
+    int _count = (int)fmax(fabs(_level), fabs(_method));
+    int _direction = Order::OrderDirection(_cmd, _mode);
+    uint _ishift = 0;
+    Chart *_chart = trade.GetChart();
+    IndicatorBase *_indi = GetIndicator(::Retracement_Indi_Type);
+
+    double _pp, _r1, _r2, _r3, _r4, _s1, _s2, _s3, _s4;
+    ChartEntry _ohlc_range = _chart.GetEntry(::Retracement_Levels_Tf, _ishift + 1, _chart.GetSymbol());
+    Retracement_BarOHLC _bar = _ohlc_range.GetBar().GetOHLC();
+    _bar.GetLevels(::Retracement_Levels_Calc_Method, ::Retracement_Levels_Applied_Price, _pp, _r1, _r2, _r3, _r4, _s1,
+                   _s2, _s3, _s4);
+    float _level_value = _bar.GetRange() / 100 * _level;
+    float _ma_level_prox_r = (float)fmin4(fabs(_indi[_ishift][0] - _r1), fabs(_indi[_ishift][0] - _r2),
+                                          fabs(_indi[_ishift][0] - _r3), fabs(_indi[_ishift][0] - _r4));
+    float _ma_level_prox_s = (float)fmin4(fabs(_indi[_ishift][0] - _s1), fabs(_indi[_ishift][0] - _s2),
+                                          fabs(_indi[_ishift][0] - _s3), fabs(_indi[_ishift][0] - _s4));
+    switch (_mode) {
+      case ORDER_TYPE_SL:
+        if (_indi[_ishift][0] > _s1) {
+          _result = float(_s1 - _level_value);
+        } else if (_indi[_ishift][0] > _s2) {
+          _result = float(_s2 - _level_value);
+        } else if (_indi[_ishift][0] > _s3) {
+          _result = float(_s3 - _level_value);
+        } else if (_indi[_ishift][0] > _s4) {
+          _result = float(_s4 - _level_value);
+        }
+        break;
+      case ORDER_TYPE_TP:
+        if (_indi[_ishift][0] < _r1) {
+          _result = float(_r1 - _level_value);
+        } else if (_indi[_ishift][0] < _r2) {
+          _result = float(_r2 - _level_value);
+        } else if (_indi[_ishift][0] < _r3) {
+          _result = float(_r3 - _level_value);
+        } else if (_indi[_ishift][0] < _r4) {
+          _result = float(_r4 - _level_value);
+        }
+        break;
+    }
+    return (float)_result;
   }
 
   /**
