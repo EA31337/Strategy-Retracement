@@ -2,9 +2,9 @@
   "platform"    :"mt5",
   "program_type":"expert",
   "copyright"   :"Copyright 2016-2023, EA31337 Ltd",
-  "link"        :"https:\/\/github.com\/EA31337\/Strategy-MA_Cross_Sup_Res",
+  "link"        :"https:\/\/github.com\/EA31337\/Strategy-Retracement",
   "version"     :"2.000",
-  "description" :"Strategy based on the moving average price indicators implementing support/resistance cross signal.",
+  "description" :"Strategy based on the Fibonacci retracement levels.",
   "optimize"    :"0",
   "fpzerocheck" :"0",
   "tester_no_cache":"0",
@@ -15,7 +15,7 @@
   "files":
   [
     {
-      "path":"Stg_MA_Cross_Sup_Res.mq5",
+      "path":"Stg_Retracement.mq5",
       "compile":true,
       "relative_to_project":true
     },
@@ -215,7 +215,7 @@
       "relative_to_project":false
     },
     {
-      "path":"Stg_MA_Cross_Sup_Res.mqh",
+      "path":"Stg_Retracement.mqh",
       "compile":false,
       "relative_to_project":true
     },

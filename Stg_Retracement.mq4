@@ -6,8 +6,8 @@
 
 /**
  * @file
- * Implements MA Cross Sup/Res strategy.
+ * Implements Retracement strategy.
  */
 
 // Includes the main code.
-#include "Stg_MA_Cross_Sup_Res.mq5"
+#include "Stg_Retracement.mq5"
