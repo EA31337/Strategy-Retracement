@@ -1,6 +1,6 @@
 /**
  * @file
- * Implements MA Cross Sup/Res strategy.
+ * Implements Retracement strategy.
  */
 
 // Includes conditional compilation directives.
@@ -20,7 +20,7 @@
 #include <EA31337-classes/Strategy.mqh>
 
 // Inputs.
-INPUT_GROUP("MA Cross Sup/Res strategy: main");
+INPUT_GROUP("Retracement strategy: main");
 input int Active_Tfs = M15B + M30B + H1B + H2B + H3B + H4B + H6B +
                        H8B;               // Timeframes (M1=1,M2=2,M5=16,M15=256,M30=1024,H1=2048,H2=4096,H3,H4,H6,H8)
 input ENUM_LOG_LEVEL Log_Level = V_INFO;  // Log level.
@@ -30,10 +30,10 @@ input bool Info_On_Chart = true;          // Display info on chart.
 #include "Stg_Retracement.mqh"
 
 // Defines.
-#define ea_name "Strategy MA Cross Sup/Res"
+#define ea_name "Strategy Retracement"
 #define ea_version "2.000"
-#define ea_desc "Strategy based on the moving average price indicators implementing support/resistance cross signal."
-#define ea_link "https://github.com/EA31337/Strategy-MA_Cross_Sup_Res"
+#define ea_desc "Strategy based on the Fibonacci retracement levels."
+#define ea_link "https://github.com/EA31337/Strategy-Retracement"
 #define ea_author "EA31337 Ltd"
 
 // Properties.
@@ -59,7 +59,7 @@ int OnInit() {
   bool _result = true;
   EAParams ea_params(__FILE__, Log_Level);
   ea = new EA(ea_params);
-  _result &= ea.StrategyAdd<Stg_MA_Cross_Sup_Res>(Active_Tfs);
+  _result &= ea.StrategyAdd<Stg_Retracement>(Active_Tfs);
   return (_result ? INIT_SUCCEEDED : INIT_FAILED);
 }
 
