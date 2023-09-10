@@ -18,10 +18,11 @@ enum ENUM_STG_RETRACEMENT_TYPE {
 
 // User params.
 INPUT_GROUP("Retracement strategy: main strategy params");
-INPUT ENUM_STG_RETRACEMENT_TYPE Retracement_Indi_Type = STG_RETRACEMENT_TYPE_FRAMA;  // Retracement: Indicator MA type
-INPUT ENUM_PP_TYPE Retracement_Levels_Calc_Method = PP_CLASSIC;                      // Method for level calculations
-INPUT ENUM_APPLIED_PRICE Retracement_Levels_Applied_Price = PRICE_HIGH;              // Calculation mode
-INPUT ENUM_TIMEFRAMES Retracement_Levels_Tf = PERIOD_D1;                             // Calculation timeframe
+INPUT ENUM_STG_RETRACEMENT_TYPE Retracement_Indi_Type =
+    STG_RETRACEMENT_TYPE_ICHIMOKU;                                       // Retracement: Indicator MA type
+INPUT ENUM_PP_TYPE Retracement_Levels_Calc_Method = PP_CLASSIC;          // Method for level calculations
+INPUT ENUM_APPLIED_PRICE Retracement_Levels_Applied_Price = PRICE_HIGH;  // Calculation mode
+INPUT ENUM_TIMEFRAMES Retracement_Levels_Tf = PERIOD_D1;                 // Calculation timeframe
 INPUT_GROUP("Retracement strategy: strategy params");
 INPUT float Retracement_LotSize = 0;                // Lot size
 INPUT int Retracement_SignalOpenMethod = 0;         // Signal open method (-3-3)
