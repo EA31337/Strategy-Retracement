@@ -1,6 +1,6 @@
 /**
  * @file
- * Strategy based on the Fibonacci retracement levels.
+ * Implements Retracement strategy based on the Fibonacci retracement levels.
  */
 
 enum ENUM_STG_RETRACEMENT_TYPE {
@@ -224,7 +224,7 @@ class Stg_Retracement : public Strategy {
     // Initialize Strategy instance.
     ChartParams _cparams(_tf, _Symbol);
     TradeParams _tparams;
-    Strategy *_strat = new Stg_Retracement(_stg_params, _tparams, _cparams, "MA");
+    Strategy *_strat = new Stg_Retracement(_stg_params, _tparams, _cparams, "Retracement");
     return _strat;
   }
 
